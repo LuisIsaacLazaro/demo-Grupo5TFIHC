@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Hospitales</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .hospital-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .hospital-table th, .hospital-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .hospital-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .hospital-actions button {
+            background-color: #dc3545;
+        }
+        .select-location {
+            margin-top: 30px;
+            text-align: center;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #007bff;
+            flex-direction: column;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ingrese los códigos RENAES de los hospitales</h1>
+
+    <div class="form-container">
+        <form action="/select_hospitals" method="POST">
+            <input type="text" name="codigo_renaes" placeholder="Código RENAES" required>
+            <button type="submit">Agregar</button>
+        </form>
+    </div>
+
+    {% if error %}
+    <p style="color:red; text-align:center;">{{ error }}</p>
+    {% endif %}
+    
+    <h2>Hospitales seleccionados:</h2>
+    <table class="hospital-table">
+        <thead>
+            <tr>
+                <th>Nombre del Hospital</th>
+                <th>Código RENAES</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for _, name, code in hospitals %}
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ code }}</td>
+                <td class="hospital-actions">
+                    <form action="/remove_hospital" method="POST">
+                        <input type="hidden" name="hospital_name" value="{{ name }}">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="select-location">
+        <h2>Selecciona una ubicación de inicio:</h2>
+        <form action="/generate_map" method="POST" onsubmit="showLoading()">
+            <select name="start_location" required>
+                <option value="0">Aeropuerto Jorge Chavez</option>
+                <option value="1">Almacen Callao</option>
+                <option value="2">Almacen Lurin</option>
+                <option value="3">Puerto del Callao</option>
+            </select>
+            <button type="submit">Generar Mapa</button>
+        </form>
+    </div>
+</div>
+
+<div id="loading">
+    <div class="spinner"></div>
+    Generando ruta... por favor espera
+</div>
+
+<script>
+    function showLoading() {
+        document.getElementById('loading').style.display = 'flex';
+    }
+</script>
+
+</body>
+</html>

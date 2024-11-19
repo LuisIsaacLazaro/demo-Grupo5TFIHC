@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de la Ruta Más Corta</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9fafc;
+            margin: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 15px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 34px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* Contenedor del mapa */
+        .map-container {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+
+        /* Información de la ruta */
+        .info-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+        .info-container div {
+            text-align: center;
+        }
+        .info-container h2 {
+            font-size: 22px;
+            margin: 5px 0;
+            color: #007bff;
+        }
+        .info-container p {
+            font-size: 16px;
+            color: #555;
+            margin: 0;
+        }
+
+        /* Botón de regreso */
+        .back-button-container {
+            text-align: center;
+        }
+        .back-button {
+            padding: 12px 25px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Mapa de la Ruta Más Corta</h1>
+
+<div class="container">
+    <div class="map-container">
+        <iframe src="/static/hospital_route_map.html"></iframe>
+    </div>
+
+    <div class="info-container">
+        <div>
+            <h2>Distancia Total</h2>
+            <p>{{ (total_distance / 1000) | round(3) }} km</p>
+        </div>
+        <div>
+            <h2>Tiempo Estimado</h2>
+            <p>{{ time_estimated_minutes }} minutos</p>
+        </div>
+        <div>
+            <h2>Hospitales Recorridos</h2>
+            <p>{{ num_hospitals }} hospitales</p>
+        </div>
+    </div>
+
+    <div class="back-button-container">
+        <a href="/select_hospitals" class="back-button">Volver a la selección de hospitales</a>
+    </div>
+</div>
+
+</body>
+</html>
